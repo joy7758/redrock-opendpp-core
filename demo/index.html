@@ -2,93 +2,69 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>RedRock OpenDPP Demo</title>
+<title>OpenDPP Sandbox</title>
 <style>
-:root {
-  --bg: #f5f5f7;
-  --card: #ffffff;
-  --text: #1d1d1f;
-  --muted: #6e6e73;
-  --accent: #0071e3;
-  --border: #e5e5ea;
+:root{
+ --bg:#f5f5f7;
+ --card:#fff;
+ --text:#1d1d1f;
+ --muted:#6e6e73;
+ --accent:#0071e3;
+ --border:#e5e5ea;
 }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-               "Helvetica Neue", Arial, sans-serif;
-  color: var(--text);
+body{
+ margin:0;
+ background:var(--bg);
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial;
+ color:var(--text);
 }
-
-.container {
-  max-width: 900px;
-  margin: 80px auto;
-  padding: 0 24px;
+.container{
+ max-width:900px;
+ margin:80px auto;
+ padding:0 24px;
 }
-
-h1 {
-  font-size: 36px;
-  font-weight: 600;
-  margin-bottom: 8px;
+h1{font-size:34px;margin-bottom:6px;}
+.subtitle{color:var(--muted);margin-bottom:40px;}
+.card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:24px;
+ margin-bottom:24px;
 }
-
-.subtitle {
-  color: var(--muted);
-  margin-bottom: 40px;
+textarea{
+ width:100%;
+ height:160px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:12px;
+ font-family:monospace;
 }
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
+button{
+ background:var(--accent);
+ color:white;
+ border:none;
+ padding:8px 16px;
+ border-radius:999px;
+ cursor:pointer;
+ margin-top:12px;
 }
-
-textarea {
-  width: 100%;
-  height: 160px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 14px;
-  font-family: monospace;
-  resize: vertical;
+pre{
+ background:#f2f2f2;
+ padding:14px;
+ border-radius:12px;
+ font-size:13px;
+ overflow-x:auto;
 }
-
-button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 16px;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-pre {
-  background: #f2f2f2;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 13px;
-  overflow-x: auto;
-}
+.status-ok{color:green;}
+.status-fail{color:red;}
 </style>
 </head>
 <body>
-
 <div class="container">
-
-<h1>OpenDPP Core</h1>
+<h1>OpenDPP Sandbox</h1>
 <div class="subtitle">
-Minimal DPP Data Object Demonstration<br>
-规范化 → 哈希 → 可验证基础
+DPP 数据对象结构测试与验证工具
 </div>
 
 <div class="card">
@@ -96,38 +72,79 @@ Minimal DPP Data Object Demonstration<br>
 {
   "product_id": "BAT-001",
   "manufacturer": "Demo Factory",
-  "timestamp": "2024-01-01T10:00:00Z"
+  "timestamp": "2024-01-01T10:00:00Z",
+  "previous_hash": null
 }
 </textarea>
-
-<button onclick="generate()">Generate Hash</button>
+<button onclick="process()">Generate & Sign</button>
 </div>
 
 <div class="card">
-<h3>Output</h3>
+<h3>Result</h3>
 <pre id="output">Ready.</pre>
 </div>
 
 </div>
 
 <script>
-async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+let keyPair;
+
+async function generateKey() {
+  keyPair = await crypto.subtle.generateKey(
+    { name: "Ed25519" },
+    true,
+    ["sign", "verify"]
+  );
 }
 
-async function generate() {
-  try {
-    const input = document.getElementById("input").value;
-    const obj = JSON.parse(input);
-    const canonical = JSON.stringify(obj);
-    const hash = await sha256(canonical);
+function canonicalize(obj) {
+  return JSON.stringify(obj, Object.keys(obj).sort());
+}
 
-    document.getElementById("output").textContent =
+async function sha256(message) {
+  const buffer = new TextEncoder().encode(message);
+  const hash = await crypto.subtle.digest("SHA-256", buffer);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+async function sign(message) {
+  const buffer = new TextEncoder().encode(message);
+  const signature = await crypto.subtle.sign("Ed25519", keyPair.privateKey, buffer);
+  return btoa(String.fromCharCode(...new Uint8Array(signature)));
+}
+
+async function verify(message, signature) {
+  const buffer = new TextEncoder().encode(message);
+  const sigBuffer = Uint8Array.from(atob(signature), c => c.charCodeAt(0));
+  return await crypto.subtle.verify("Ed25519", keyPair.publicKey, sigBuffer, buffer);
+}
+
+async function process() {
+  try {
+    if (!keyPair) await generateKey();
+
+    const input = JSON.parse(document.getElementById("input").value);
+
+    if (!input.product_id || !input.manufacturer) {
+      document.getElementById("output").innerHTML =
+        "<span class='status-fail'>Schema validation failed: missing required fields</span>";
+      return;
+    }
+
+    const canonical = canonicalize(input);
+    const hash = await sha256(canonical);
+    const signature = await sign(hash);
+    const verified = await verify(hash, signature);
+
+    document.getElementById("output").innerHTML =
       "Canonical JSON:\n" + canonical +
-      "\n\nSHA-256:\n" + hash;
+      "\n\nSHA-256:\n" + hash +
+      "\n\nSignature:\n" + signature +
+      "\n\nVerification: " +
+      (verified
+        ? "<span class='status-ok'>OK</span>"
+        : "<span class='status-fail'>FAILED</span>");
 
   } catch (e) {
     document.getElementById("output").textContent = "Invalid JSON";
