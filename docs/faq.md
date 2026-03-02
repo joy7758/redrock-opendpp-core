@@ -1,25 +1,103 @@
-# FAQ
+# FAQ — OpenDPP-Core
 
-## Is RedRock OpenDPP Core a full DPP platform?
+## Q: OpenDPP-Core 是什么？
 
-No. It is a core object engine for canonicalization, hash, sign, and verify.
+OpenDPP-Core 是一个可嵌入、可自托管的 DPP 数据对象引擎。
 
-## Does it require blockchain?
+作用：
+将产品数据生成“可验证对象”（canonicalize → hash → sign → verify）。
 
-No. Blockchain is optional and not required by this project.
+不是 SaaS，不托管数据，不依赖中心服务器。
 
-## Does it require a central RedRock server?
+---
 
-No. It is self-hosted and embeddable.
+## Q: 它解决什么问题？
 
-## Can Chinese SaaS providers embed this into existing systems?
+欧盟 DPP 关注三点：
 
-Yes. The project is designed for integration with DPP SaaS backends and ERP middleware.
+1. 数据结构是否规范
+2. 生命周期是否可追溯
+3. 数据是否被篡改
 
-## Is offline verification supported?
+OpenDPP-Core 提供数据完整性与可验证基础。
 
-Yes. Verification is local and does not require network calls.
+---
 
-## How is lifecycle evolution tracked?
+## Q: 它和数据库有什么区别？
 
-Using `lifecycle.sequence` and `lifecycle.prevHash`.
+数据库存数据。
+OpenDPP-Core 生成“可验证对象”。
+
+对象可以：
+
+* 跨系统传递
+* 独立验证
+* 保留历史版本链
+
+---
+
+## Q: 什么是“可验证”？
+
+任何人可以用公开算法验证：
+
+* JSON 是否规范化一致
+* 哈希是否匹配
+* 签名是否有效
+
+不需要信任平台方。
+
+---
+
+## Q: 什么是版本链？
+
+DPP 数据会随着产品生命周期更新。
+
+每个新版本包含前一版本的 hash。
+可以证明数据演化顺序。
+
+---
+
+## Q: 是否强制使用注册中心？
+
+不强制。
+
+核心设计为本地运行。
+如需注册体系，可自行扩展。
+
+---
+
+## Q: 谁适合使用？
+
+* 中国 DPP SaaS 服务商
+* ERP 厂商
+* 出口欧盟的制造企业
+* 合规系统集成商
+
+---
+
+## Q: 不包含什么？
+
+* 不提供 DPP SaaS 平台
+* 不自动生成行业法规字段
+* 不承担认证职责
+
+---
+
+## Q: 商业模式是什么？
+
+核心开源。
+
+商业方向包括：
+
+* 法规更新支持
+* 行业 Profile 模板
+* ERP 集成支持
+* 多供应链数据合并工具
+
+---
+
+## Q: 从哪里开始？
+
+1. 阅读 docs/eu-dpp-explained.md
+2. 阅读 docs/china-export-dpp-guide.md
+3. 运行 npm run demo
