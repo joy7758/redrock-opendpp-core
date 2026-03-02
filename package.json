@@ -1,0 +1,27 @@
+{
+  "name": "@redrock/opendpp-core",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"(placeholder)\"",
+    "build": "echo \"(placeholder)\""
+  },
+  "keywords": [
+    "DPP",
+    "Digital Product Passport",
+    "schema",
+    "sign",
+    "verify",
+    "RedRock"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "schema"
+  ]
+}
