@@ -1,67 +1,68 @@
 # RedRock OpenDPP Core
 
-RedRock OpenDPP Core is a lightweight, self-hosted Digital Product Passport (DPP) data object engine.
-
-Designed for:
-- EU Digital Product Passport (DPP) compliance
-- SaaS DPP providers
-- ERP system integration
-- Chinese exporters facing EU regulations
+RedRock OpenDPP Core is a compliance-oriented Digital Product Passport (DPP) data foundation designed for Chinese exporters facing EU regulations.
 
 ---
 
-## What is Digital Product Passport (DPP)?
+## Target Market
 
-Digital Product Passport (DPP) is required under the EU Ecodesign for Sustainable Products Regulation (ESPR).
-
-Companies exporting batteries, textiles, electronics and other regulated goods to the EU must provide structured, traceable, verifiable product data.
+- Chinese manufacturers exporting to the EU
+- Chinese DPP SaaS providers
+- ERP and MES vendors serving export industries
+- Compliance system integrators
 
 ---
 
-## What RedRock OpenDPP Core Does
+## Why It Exists
 
-RedRock provides:
+Under the EU Ecodesign for Sustainable Products Regulation (ESPR), Digital Product Passport (DPP) is becoming mandatory.
+
+Chinese exporters must provide:
+
+- Structured product data
+- Traceable lifecycle information
+- Verifiable integrity proof
+
+RedRock OpenDPP Core provides the minimal cryptographic data foundation required to support this.
+
+---
+
+## What RedRock Provides
 
 - Deterministic JSON canonicalization
-- SHA-256 hashing
+- SHA-256 object hashing
 - Ed25519 local signing
 - Offline verification
-- Lifecycle version chaining (previous hash mechanism)
+- Lifecycle chaining mechanism
 
 No central server.
-No vendor lock-in.
+No forced registry.
 No blockchain dependency.
 
 ---
 
-## Designed for Chinese DPP Service Providers
+## Designed for China-to-EU Export Scenarios
 
-Many Chinese SaaS providers are building EU DPP systems.
+Typical integration scenarios:
 
-RedRock OpenDPP Core can be embedded into:
-
-- DPP SaaS backend
-- ERP middleware
-- Manufacturing data systems
-- Factory barcode workflows
+- Factory barcode generation systems
+- ERP export modules
+- SaaS-based DPP platforms
+- OEM supply chain data collection systems
 
 ---
 
-## Key Technical Features
+## Technical Positioning
 
-- Schema-first DPP object model
-- Versioned lifecycle chain
-- Profile-based payload extension
-- Fully auditable cryptographic process
-- Compatible with AI indexing and structured search
+RedRock is not a SaaS platform.
+
+It is a neutral, embeddable DPP data integrity core that Chinese compliance systems can integrate into their own infrastructure.
 
 ---
 
 ## Chinese Documentation
 
-中文文档请查看:
-
-README.zh-CN.md
+See: README.zh-CN.md
 
 ---
 
