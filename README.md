@@ -1,62 +1,69 @@
-# RedRock OpenDPP Core
+# 欧盟数字产品护照（DPP）数据对象核心
+EU Digital Product Passport Data Object Core
 
-中文：RedRock OpenDPP Core 是一个面向中国出口企业的欧盟 DPP 合规数据底座。  
-English: RedRock OpenDPP Core is a compliance-focused DPP data foundation for China-to-EU export scenarios.
-
----
-
-## 项目定位 | Positioning
-
-中文：这个项目只做一件事，把产品数据变成“可验证对象”（canonicalize -> hash -> sign -> verify）。  
-English: This project focuses on one job: turning product data into a verifiable object.
-
-如果你在做出口合规系统，可以先用它把“数据完整性”这一步稳定下来。  
-If you are building export compliance systems, it helps stabilize the data integrity layer first.
+面向中国出口企业与 DPP 服务商的开源合规基础结构。  
+RedRock OpenDPP Core
 
 ---
 
-## 适用对象 | Who This Is For
+本项目是一个面向中国出口企业与 DPP 服务商的  
+欧盟数字产品护照（Digital Product Passport, DPP）  
+数据对象结构与可验证模型。
 
-- 出口欧盟的中国制造企业 / Chinese manufacturers exporting to the EU
-- 中国 DPP SaaS 服务商 / Chinese DPP SaaS providers
-- ERP / MES 厂商 / ERP and MES vendors
-- 合规系统集成商 / Compliance system integrators
-
----
-
-## 核心能力 | Core Capabilities
-
-- 确定性 JSON 规范化 / Deterministic JSON canonicalization
-- SHA-256 对象哈希 / SHA-256 object hashing
-- Ed25519 本地签名 / Local Ed25519 signing
-- 离线验签 / Offline verification
-- 生命周期链式关联 / Lifecycle hash chaining
-
-不依赖中心服务器，不强制注册中心，不依赖区块链。  
-No central server, no forced registry, no blockchain dependency.
+适用于：
+- 欧盟 DPP 合规开发
+- 电池护照（Battery Passport）
+- 出口产品合规数据结构设计
+- DPP SaaS 系统集成
 
 ---
 
-## 典型接入场景 | Typical Integrations
+## 你可能正在找这些问题
 
-- 工厂条码与追溯系统 / Factory barcode and traceability workflows
-- ERP 出口模块 / ERP export modules
-- DPP SaaS 后端 / DPP SaaS backends
-- 供应链数据采集系统 / Supply-chain data collection systems
-
----
-
-## 项目边界 | Project Scope
-
-中文：RedRock 不是 SaaS 平台，不托管业务数据，不替代合规咨询。  
-English: RedRock is not a SaaS platform, does not host business data, and does not replace compliance consulting.
-
-它是可嵌入、可自托管的数据完整性内核。  
-It is an embeddable, self-hosted data integrity core.
+如果你正在评估“欧盟 DPP 怎么做”，或者要落地“欧盟数字产品护照 数据结构”，  
+这个仓库提供可直接集成的对象模型和验证流程，覆盖 DPP 开发、  
+电池护照 接口设计，以及欧盟产品护照 技术方案中的数据完整性层。
 
 ---
 
-## 快速开始 | Quick Start
+## 核心能力
+
+- 确定性 JSON 规范化（Canonicalization）
+- SHA-256 对象哈希
+- Ed25519 本地签名
+- 离线验签
+- 生命周期链式关联
+
+不依赖中心服务器，不强制注册中心，不依赖区块链。
+
+---
+
+## 适用对象
+
+- 出口欧盟的中国制造企业
+- 中国 DPP SaaS 服务商
+- ERP / MES 厂商
+- 合规系统集成商
+
+---
+
+## 典型接入场景
+
+- 工厂条码与追溯系统
+- ERP 出口模块
+- DPP SaaS 后端
+- 供应链数据采集系统
+
+---
+
+## 项目边界
+
+RedRock OpenDPP Core 不是 SaaS 平台，不托管业务数据，不替代合规咨询。  
+它是可嵌入、可自托管的数据完整性内核。
+
+---
+
+## 快速开始
 
 ```bash
 npm run demo
@@ -64,7 +71,7 @@ npm run demo
 
 ---
 
-## 文档导航 | Documentation
+## 文档导航
 
 - [README.zh-CN.md](README.zh-CN.md)
 - [docs/eu-dpp-explained.md](docs/eu-dpp-explained.md)
@@ -74,6 +81,6 @@ npm run demo
 
 ---
 
-## 开源协议 | License
+## 开源协议
 
 Apache-2.0

@@ -1,0 +1,156 @@
+:root {
+  --text-primary: #111111;
+  --text-secondary: #555555;
+  --surface: #ffffff;
+  --border: #d8d8d8;
+  --button-bg: #000000;
+  --button-hover: #333333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.hero {
+  text-align: center;
+  padding: 120px 20px 80px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 64px;
+  font-weight: 600;
+  letter-spacing: 4px;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.description {
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: var(--text-secondary);
+}
+
+.actions {
+  margin-top: 28px;
+}
+
+button,
+.actions a {
+  padding: 12px 24px;
+  border: 1px solid #000;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  margin: 10px;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 0;
+  font-size: 15px;
+}
+
+button:hover,
+.actions a:hover {
+  background: var(--button-hover);
+}
+
+#demoSection {
+  width: min(860px, 92vw);
+  margin: 0 auto 64px;
+  padding: 0 10px;
+}
+
+.mode-switch {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.mode-switch button {
+  background: #fff;
+  color: #111;
+}
+
+.mode-switch button.active {
+  background: #111;
+  color: #fff;
+}
+
+#formArea {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#formArea input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+
+#generateBtn {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+#resultArea {
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  min-height: 84px;
+  overflow-x: auto;
+  background: #fafafa;
+}
+
+#resultArea pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+footer {
+  text-align: center;
+  border-top: 1px solid var(--border);
+  padding: 28px 20px 36px;
+  color: var(--text-secondary);
+}
+
+footer p {
+  margin: 6px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .hero {
+    padding: 84px 16px 56px;
+  }
+
+  h1 {
+    font-size: 44px;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  #formArea {
+    grid-template-columns: 1fr;
+  }
+}

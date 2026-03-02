@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="红岩：面向中国出口企业与 DPP 服务商的欧盟数字产品护照数据对象演示系统。">
+  <title>红岩 | 欧盟数字产品护照数据对象演示</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="hero">
+    <h1>红岩</h1>
+    <p class="subtitle">欧盟数字产品护照（DPP）数据对象演示系统</p>
+    <p class="description">面向中国出口企业与 DPP 服务商的开源合规数据对象基础设施</p>
+    <div class="actions">
+      <button id="startDemo" type="button">开始演示</button>
+      <a href="https://github.com/joy7758/redrock-opendpp-core" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <section id="demoSection" class="hidden">
+    <div class="mode-switch">
+      <button id="salesMode" type="button" class="active">销售模式</button>
+      <button id="techMode" type="button">技术模式</button>
+    </div>
+
+    <div id="formArea">
+      <input placeholder="产品名称" id="productName" autocomplete="off">
+      <input placeholder="产品型号" id="productModel" autocomplete="off">
+      <input placeholder="材料来源" id="materialSource" autocomplete="off">
+      <input placeholder="碳排数据 (kg CO₂)" id="carbonData" autocomplete="off">
+      <button id="generateBtn" type="button">生成 DPP 数据对象</button>
+    </div>
+
+    <div id="resultArea" aria-live="polite"></div>
+  </section>
+
+  <footer>
+    <p>红岩 · 开源基础设施</p>
+    <p>可验证 · 可嵌入 · 可长期演化</p>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
