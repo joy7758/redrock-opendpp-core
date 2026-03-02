@@ -1,6 +1,9 @@
 # 欧盟数字产品护照（DPP）数据对象核心
 EU Digital Product Passport Data Object Core
 
+📘 官方规范：  
+[红岩 DPP 数据对象规范 v1.0](docs/specification-v1.0.md)
+
 面向中国出口企业与 DPP 服务商的开源合规基础结构。  
 RedRock OpenDPP Core
 
