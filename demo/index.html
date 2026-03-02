@@ -1,20 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <title>RedRock OpenDPP Demo</title>
 <style>
-body { font-family: Arial; max-width: 800px; margin: 40px auto; }
-textarea { width: 100%; height: 150px; }
-button { margin: 10px 0; padding: 8px 12px; }
-pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0071e3;
+  --border: #e5e5ea;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+               "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+}
+
+.container {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 0 24px;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+textarea {
+  width: 100%;
+  height: 160px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14px;
+  font-family: monospace;
+  resize: vertical;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+pre {
+  background: #f2f2f2;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  overflow-x: auto;
+}
 </style>
 </head>
 <body>
 
-<h2>RedRock OpenDPP Core — Demo</h2>
+<div class="container">
 
-<p>输入 JSON 对象：</p>
+<h1>OpenDPP Core</h1>
+<div class="subtitle">
+Minimal DPP Data Object Demonstration<br>
+规范化 → 哈希 → 可验证基础
+</div>
+
+<div class="card">
 <textarea id="input">
 {
   "product_id": "BAT-001",
@@ -23,10 +100,15 @@ pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
 }
 </textarea>
 
-<button onclick="generate()">生成 Hash</button>
+<button onclick="generate()">Generate Hash</button>
+</div>
 
-<h3>输出：</h3>
-<pre id="output"></pre>
+<div class="card">
+<h3>Output</h3>
+<pre id="output">Ready.</pre>
+</div>
+
+</div>
 
 <script>
 async function sha256(message) {
@@ -42,11 +124,13 @@ async function generate() {
     const obj = JSON.parse(input);
     const canonical = JSON.stringify(obj);
     const hash = await sha256(canonical);
+
     document.getElementById("output").textContent =
       "Canonical JSON:\n" + canonical +
       "\n\nSHA-256:\n" + hash;
+
   } catch (e) {
-    document.getElementById("output").textContent = "JSON 解析错误";
+    document.getElementById("output").textContent = "Invalid JSON";
   }
 }
 </script>
