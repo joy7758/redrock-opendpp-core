@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"(placeholder)\"",
-    "build": "echo \"(placeholder)\""
+    "build": "echo \"(placeholder)\"",
+    "demo": "node examples/minimal-demo.js"
   },
   "keywords": [
     "DPP",
@@ -22,6 +23,10 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "schema"
+    "schema",
+    "engine",
+    "signer",
+    "verifier",
+    "examples"
   ]
 }

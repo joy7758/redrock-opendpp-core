@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/opendpp/schema/dpp-schema-v1.json",
+  "title": "OpenDPP Data Object (v1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specVersion",
+    "id",
+    "type",
+    "issuedAt",
+    "issuer",
+    "subject",
+    "lifecycle",
+    "payload"
+  ],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "const": "opendpp/1.0"
+    },
+    "id": {
+      "type": "string",
+      "description": "Stable identifier of the DPP object instance (e.g., UUID/URN)."
+    },
+    "type": {
+      "type": "string",
+      "description": "Product category/type identifier (e.g., battery, textile)."
+    },
+    "issuedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "description": "Optional org identifier (VAT/EORI/DUNS/etc.)."
+        }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productId"
+      ],
+      "properties": {
+        "productId": {
+          "type": "string",
+          "description": "Serial/batch/GTIN/other product identifier."
+        },
+        "batchId": {
+          "type": "string"
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage",
+        "sequence"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string",
+          "description": "Lifecycle stage label.",
+          "enum": [
+            "manufacture",
+            "assembly",
+            "distribution",
+            "use",
+            "repair",
+            "recycle",
+            "other"
+          ]
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonic stage sequence for this object id."
+        },
+        "prevHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Hash of the previous lifecycle object (same id). Null for genesis."
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "DPP payload. Keep flexible; providers extend via agreed profiles.",
+      "additionalProperties": true
+    },
+    "proof": {
+      "type": "object",
+      "description": "Optional proof container. Stored alongside object when signing.",
+      "additionalProperties": false,
+      "required": [
+        "alg",
+        "publicKey",
+        "signature",
+        "hash"
+      ],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "const": "Ed25519"
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "Base64-encoded Ed25519 public key in SPKI DER format."
+        },
+        "signature": {
+          "type": "string",
+          "description": "Base64-encoded signature."
+        },
+        "hash": {
+          "type": "string",
+          "description": "Hex SHA-256 of canonicalized object (without proof)."
+        }
+      }
+    }
+  }
+}
