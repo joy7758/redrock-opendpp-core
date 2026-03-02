@@ -2,7 +2,8 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>OpenDPP Sandbox</title>
+<title>OpenDPP 数据对象工具 | DPP Data Object Tool</title>
+
 <style>
 :root{
  --bg:#f5f5f7;
@@ -19,12 +20,12 @@ body{
  color:var(--text);
 }
 .container{
- max-width:900px;
- margin:80px auto;
+ max-width:1000px;
+ margin:60px auto;
  padding:0 24px;
 }
-h1{font-size:34px;margin-bottom:6px;}
-.subtitle{color:var(--muted);margin-bottom:40px;}
+h1{font-size:32px;margin-bottom:4px;}
+.subtitle{color:var(--muted);margin-bottom:32px;}
 .card{
  background:var(--card);
  border:1px solid var(--border);
@@ -32,19 +33,19 @@ h1{font-size:34px;margin-bottom:6px;}
  padding:24px;
  margin-bottom:24px;
 }
-textarea{
+textarea,input{
  width:100%;
- height:160px;
  border:1px solid var(--border);
  border-radius:12px;
- padding:12px;
+ padding:10px;
  font-family:monospace;
 }
+textarea{height:160px;}
 button{
  background:var(--accent);
  color:white;
  border:none;
- padding:8px 16px;
+ padding:8px 18px;
  border-radius:999px;
  cursor:pointer;
  margin-top:12px;
@@ -58,42 +59,71 @@ pre{
 }
 .status-ok{color:green;}
 .status-fail{color:red;}
+.small{font-size:13px;color:var(--muted);}
 </style>
 </head>
+
 <body>
 <div class="container">
-<h1>OpenDPP Sandbox</h1>
+
+<h1>OpenDPP 数据对象工具</h1>
 <div class="subtitle">
-DPP 数据对象结构测试与验证工具
+本地生成 / 签名 / 验签 / 版本链 / 导出<br>
+Local DPP Object Generator & Verifier
 </div>
 
 <div class="card">
+<h3>① 数据输入 Data Input</h3>
 <textarea id="input">
 {
   "product_id": "BAT-001",
   "manufacturer": "Demo Factory",
-  "timestamp": "2024-01-01T10:00:00Z",
-  "previous_hash": null
+  "timestamp": "2024-01-01T10:00:00Z"
 }
 </textarea>
-<button onclick="process()">Generate & Sign</button>
+<div class="small">
+必填字段 Required: product_id, manufacturer
+</div>
 </div>
 
 <div class="card">
-<h3>Result</h3>
+<h3>② 版本链 Previous Version</h3>
+<input id="previousHash" placeholder="previous_hash (可选 optional)">
+</div>
+
+<div class="card">
+<button onclick="generate()">生成对象 Generate Object</button>
+<button onclick="download()">导出 JSON Export</button>
+<button onclick="makeQR()">生成二维码 QR</button>
+</div>
+
+<div class="card">
+<h3>③ 结果 Result</h3>
 <pre id="output">Ready.</pre>
+</div>
+
+<div class="card">
+<h3>④ 验证 Verification</h3>
+<button onclick="verifyObject()">重新验签 Verify</button>
+<pre id="verifyOutput"></pre>
+</div>
+
+<div class="card">
+<h3>⑤ QR Code</h3>
+<div id="qrcode"></div>
 </div>
 
 </div>
 
 <script>
 let keyPair;
+let generatedObject;
 
 async function generateKey() {
   keyPair = await crypto.subtle.generateKey(
     { name: "Ed25519" },
     true,
-    ["sign", "verify"]
+    ["sign","verify"]
   );
 }
 
@@ -108,47 +138,85 @@ async function sha256(message) {
     .map(b => b.toString(16).padStart(2,"0")).join("");
 }
 
-async function sign(message) {
-  const buffer = new TextEncoder().encode(message);
+async function sign(hash) {
+  const buffer = new TextEncoder().encode(hash);
   const signature = await crypto.subtle.sign("Ed25519", keyPair.privateKey, buffer);
   return btoa(String.fromCharCode(...new Uint8Array(signature)));
 }
 
-async function verify(message, signature) {
-  const buffer = new TextEncoder().encode(message);
+async function verify(hash, signature) {
+  const buffer = new TextEncoder().encode(hash);
   const sigBuffer = Uint8Array.from(atob(signature), c => c.charCodeAt(0));
   return await crypto.subtle.verify("Ed25519", keyPair.publicKey, sigBuffer, buffer);
 }
 
-async function process() {
+async function generate() {
+  if (!keyPair) await generateKey();
   try {
-    if (!keyPair) await generateKey();
-
     const input = JSON.parse(document.getElementById("input").value);
 
     if (!input.product_id || !input.manufacturer) {
       document.getElementById("output").innerHTML =
-        "<span class='status-fail'>Schema validation failed: missing required fields</span>";
+        "<span class='status-fail'>缺少必填字段 Missing required fields</span>";
       return;
     }
+
+    const prev = document.getElementById("previousHash").value || null;
+    input.previous_hash = prev;
 
     const canonical = canonicalize(input);
     const hash = await sha256(canonical);
     const signature = await sign(hash);
-    const verified = await verify(hash, signature);
 
-    document.getElementById("output").innerHTML =
-      "Canonical JSON:\n" + canonical +
-      "\n\nSHA-256:\n" + hash +
-      "\n\nSignature:\n" + signature +
-      "\n\nVerification: " +
-      (verified
-        ? "<span class='status-ok'>OK</span>"
-        : "<span class='status-fail'>FAILED</span>");
+    generatedObject = {
+      schema_version: "1.0",
+      data: input,
+      integrity: {
+        algorithm: "SHA-256",
+        hash: hash,
+        signature: signature
+      }
+    };
 
-  } catch (e) {
-    document.getElementById("output").textContent = "Invalid JSON";
+    document.getElementById("output").textContent =
+      JSON.stringify(generatedObject,null,2);
+
+  } catch(e) {
+    document.getElementById("output").textContent = "JSON 格式错误 Invalid JSON";
   }
+}
+
+async function verifyObject() {
+  if (!generatedObject) return;
+
+  const canonical = canonicalize(generatedObject.data);
+  const hash = await sha256(canonical);
+
+  const valid = await verify(hash, generatedObject.integrity.signature);
+
+  document.getElementById("verifyOutput").innerHTML =
+    valid
+      ? "<span class='status-ok'>验证通过 Verification OK</span>"
+      : "<span class='status-fail'>验证失败 Verification FAILED</span>";
+}
+
+function download() {
+  if (!generatedObject) return;
+  const blob = new Blob([JSON.stringify(generatedObject,null,2)], {type:"application/json"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "dpp-object.json";
+  link.click();
+}
+
+function makeQR() {
+  if (!generatedObject) return;
+  const qrDiv = document.getElementById("qrcode");
+  qrDiv.innerHTML = "";
+  const img = document.createElement("img");
+  img.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+            encodeURIComponent(JSON.stringify(generatedObject));
+  qrDiv.appendChild(img);
 }
 </script>
 
