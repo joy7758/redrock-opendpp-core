@@ -29,10 +29,32 @@
       <input placeholder="产品型号" id="productModel" autocomplete="off">
       <input placeholder="材料来源" id="materialSource" autocomplete="off">
       <input placeholder="碳排数据 (kg CO₂)" id="carbonData" autocomplete="off">
-      <button id="generateBtn" type="button">生成 DPP 数据对象</button>
+      <div class="form-actions">
+        <button id="generateBtn" type="button">生成 DPP 数据对象</button>
+        <button id="newVersionBtn" type="button">生成新版本</button>
+      </div>
     </div>
 
-    <div id="resultArea" aria-live="polite"></div>
+    <div id="modePanels">
+      <div id="editorSection" class="hidden">
+        <h3>结构编辑区</h3>
+        <textarea id="jsonEditor" rows="15"></textarea>
+        <button id="validateBtn" type="button">验证当前结构</button>
+      </div>
+
+      <div id="statusSection">
+        <div id="verificationResult" class="card verification-card" aria-live="polite">
+          等待验证
+        </div>
+
+        <div id="resultArea" class="card hidden" aria-live="polite"></div>
+
+        <div id="chainSection" class="card hidden">
+          <h3>生命周期链条</h3>
+          <div id="chainList">尚未生成版本</div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <footer>

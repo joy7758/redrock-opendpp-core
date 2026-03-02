@@ -101,15 +101,66 @@ button:hover,
   font-size: 14px;
 }
 
-#generateBtn {
+.form-actions {
   grid-column: 1 / -1;
-  justify-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.form-actions button {
+  margin-right: 0;
+}
+
+#modePanels {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+#editorSection {
+  border: 1px solid var(--border);
+  padding: 14px;
+  background: #fcfcfc;
+}
+
+#editorSection h3,
+#chainSection h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+#jsonEditor {
+  width: 100%;
+  min-height: 280px;
+  border: 1px solid var(--border);
+  padding: 12px;
+  font-family: "SF Mono", "Menlo", Monaco, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  resize: vertical;
+  background: #fff;
+  color: #111;
+}
+
+#validateBtn {
+  margin: 12px 0 0;
+}
+
+#statusSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  padding: 16px;
+  background: #fff;
 }
 
 #resultArea {
-  margin-top: 18px;
-  border: 1px solid var(--border);
-  padding: 16px;
   min-height: 84px;
   overflow-x: auto;
   background: #fafafa;
@@ -119,6 +170,44 @@ button:hover,
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.verification-card {
+  font-weight: 600;
+  background: #f6f6f6;
+}
+
+.verification-card.success {
+  color: #0f6b3a;
+  border-color: #9ad9b7;
+  background: #ecfff4;
+}
+
+.verification-card.error {
+  color: #8a1e1e;
+  border-color: #f1b6b6;
+  background: #fff0f0;
+}
+
+#chainList {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+#chainList .chain-item {
+  padding: 8px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+#chainList .chain-item:last-child {
+  border-bottom: 0;
+}
+
+#chainList code {
+  background: #f5f5f5;
+  padding: 1px 4px;
+  border-radius: 4px;
 }
 
 footer {
@@ -152,5 +241,14 @@ footer p {
 
   #formArea {
     grid-template-columns: 1fr;
+  }
+
+  #modePanels {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions button {
+    width: calc(50% - 10px);
+    min-width: 140px;
   }
 }
