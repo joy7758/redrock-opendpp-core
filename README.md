@@ -13,6 +13,13 @@ RedRock OpenDPP Core
 欧盟数字产品护照（Digital Product Passport, DPP）  
 数据对象结构与可验证模型。
 
+## Digital Biosphere Ecosystem
+
+This repository is part of the **Digital Biosphere Architecture**.
+
+Architecture overview:
+https://github.com/joy7758/digital-biosphere-architecture
+
 适用于：
 - 欧盟 DPP 合规开发
 - 电池护照（Battery Passport）
