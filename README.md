@@ -1,6 +1,11 @@
 # 欧盟数字产品护照（DPP）数据对象核心
 EU Digital Product Passport Data Object Core
 
+> Legacy lineage repository.
+> Historical context for the earlier DPP / sovereignty / governance formation phase.
+> Not part of the current canonical five-layer verifiable autonomous systems stack.
+> Current canonical entry: [joy7758](https://github.com/joy7758) profile and [digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture).
+
 📘 官方规范：  
 [红岩 DPP 数据对象规范 v1.0](docs/specification-v1.0.md)
 
@@ -78,6 +83,10 @@ RedRock OpenDPP Core 不是 SaaS 平台，不托管业务数据，不替代合�
 ```bash
 npm run demo
 ```
+
+## Current relationship to the main line
+
+This repository is a predecessor from the EU DPP data-object phase. It preserves an earlier product-passport application track that informed the current line's integrity and compliance concerns, but it is not part of the current five-layer stack.
 
 ---
 
